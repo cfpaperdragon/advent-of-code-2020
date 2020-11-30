@@ -4,6 +4,7 @@ import sys
 sys.path.append('../')
 
 # Now you can import your module
+# pylint: disable=import-error
 import common
 
 common.echo("start")
