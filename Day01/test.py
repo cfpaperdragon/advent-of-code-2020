@@ -11,6 +11,11 @@ common.echo("start")
 
 with open("input\\test.txt") as file:
     line = file.readline()
-    print(line)
+    count = 1
+    while line:
+        print("Line {}: {}".format(count, line.strip()))
+        value = int(line.strip())
+        line = file.readline()
+        count += 1
 
 common.echo("end")
