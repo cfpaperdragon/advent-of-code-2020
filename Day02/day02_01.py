@@ -1,0 +1,1 @@
+# Day02 exercise 1
