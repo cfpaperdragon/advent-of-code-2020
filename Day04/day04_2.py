@@ -23,13 +23,18 @@ def is_valid_year(s):
         False
     return is_int(s)
 
-def validate_passport_fields(pp_dict):
+def validate_byr(byr):
     # byr (Birth Year) - four digits; at least 1920 and at most 2002.
-    byr = pp_dict["byr"]
     if not is_valid_year(byr):
         return False
     byr_year = int(byr)
     if byr_year > 2002 or byr_year < 1920:
+        return False
+    return True
+
+def validate_passport_fields(pp_dict):
+    byr_value = pp_dict["byr"]
+    if not validate_byr(byr_value):
         return False
 
     # iyr (Issue Year) - four digits; at least 2010 and at most 2020.
@@ -68,6 +73,8 @@ def validate_passport_fields(pp_dict):
                 return False
         else:
             return False
+    else:
+        return False
 
     # hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
     hcl = pp_dict["hcl"]
@@ -102,7 +109,8 @@ for i in range(len(passports)):
     if day04.validate_passport(passports[i]):
         passport_in_dict = string_passport_to_dict(passports[i])
         if validate_passport_fields(passport_in_dict):
-            print(passport_in_dict)
+            # print("byr: {}".format(passport_in_dict["byr"]))
+            # print("hgt: {}".format(passport_in_dict["hgt"]))
             count_valid += 1
 
 print(count_valid)
