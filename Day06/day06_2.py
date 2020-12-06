@@ -1,21 +1,18 @@
-# Day 06 exercise 1
+# Day 06 exercise 2
 
 def read_answers(path):
     group_list = list()
     with open(path) as file:
         line = file.readline()
-        answers = ""
+        answers = list()
         while line:
             if len(line.strip()) == 0:
-                # line break between passports
-                answers = answers.replace("\n", " ")
                 group_list.append(answers)
-                answers = ""
+                answers = list()
             else:
-                answers += line
+                answers.append(line.strip())
             line = file.readline()
         # add last one
-        answers = answers.replace("\n", " ")
         group_list.append(answers)
 
     return group_list
@@ -23,18 +20,27 @@ def read_answers(path):
 def count_group(g):
     questions = "abcdefghijklmnopqrstuxyvwz"
 
-    count_answers = 0
+    count_answers = dict()
     for question in questions:
-        if question in g:
-            count_answers += 1
+        count = 0
+        for answer_list in g:
+            if question in answer_list:
+                count += 1
+        count_answers[question] = count
+    
+    number_lists = len(g)
+    count_all_answers = 0
+    for key in count_answers:
+        if count_answers[key] == number_lists:
+            count_all_answers += 1
 
-    return count_answers
+    return count_all_answers
 
 groups = read_answers("input\\input.txt")
-# print(groups)
 
 total = 0
 for group in groups:
+    # print(group)
     result = count_group(group)
     total += result
 
