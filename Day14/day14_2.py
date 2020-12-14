@@ -40,11 +40,14 @@ def unfold_address(address):
     return address_list
 
 def unfold_all_addresses(address_list):
-    new_list = list()
+    # print(address_list)
     while "X" in address_list[0]:
+        new_list = list()
         while len(address_list) > 0:
             address = address_list.pop(0)
+            # print(address)
             unfolded_list = unfold_address(address)
+            # print(unfolded_list)
             for unfolded in unfolded_list:
                 new_list.append(unfolded)
         address_list = new_list
@@ -60,21 +63,24 @@ def new_execute(p):
             mask = day14.get_mask(p[i])
             # print(mask)
         elif "mem" in p[i]:
-            print("mem[{}] = {}".format(mem_address, value))
+            # print("mem[{}] = {}".format(mem_address, value))
             mem_address, value = day14.get_values(p[i])
             address_template = new_apply_mask(mem_address, mask)
             address_list = list()
             address_list.append(address_template)
             address_list = unfold_all_addresses(address_list)
-            print(address_list)           
+            for address in address_list:
+                int_address = int("0b" + address, 2)
+                m[int_address] = value
+ 
     return m
 
-program = day14.read_input("input//example02.txt")
+program = day14.read_input("input//input.txt")
 
 # print(program)
 
 memory = new_execute(program)
-# sum = 0
-# for key in memory.keys():
-#     sum += memory[key]
-# print(sum)
+sum = 0
+for key in memory.keys():
+    sum += memory[key]
+print(sum)
