@@ -9,29 +9,58 @@ sys.path.append('../')
 # pylint: disable=import-error
 import common
 
-# idea: make a tree instead of using stack like parser
+# idea put parentesis around + operations then use last exercise parser
+# other idea: calculate the + first in the token list
+# start by processing the parentesis
+# start by the last ( that should match the closest )
 
-def make_tree(tokens):
-    if len(tokens) == 1:
-        return tokens[0]
-    left = tokens.pop(0)
-    operation = tokens.pop(0)
-    right = make_tree(tokens)
-    return (left, operation, right)
-
-def make_expression_tree(expression):
+def resolve_in_place(expression):
     # prepare expression
     e = expression.replace("(", " ( ")
     e = e.replace(")", " ) ")
-    print(e)
+    # print(e)
     tokens = e.split(" ")
     token_list = list(tokens)
-    print(token_list)
-    my_tree = make_tree(token_list)
-    return my_tree
+    return resolve_in_place_tokens(token_list, 0, len(token_list))
 
+def resolve_in_place_tokens(token_list, start, end):
+    while "+" in token_list:
+        index = token_list.index("+")
+        value_before = 0
+        value_after = 0
+        if token_list[index-1] != ")":
+            value_before = int(token_list[index-1])
+        else:
+            value_before = 0
+        if token_list[index+1] != "(":
+            value_after = int(token_list[index+1])
+        else:
+            value_after = 0
+        total = value_before + value_after
+        # replace the first value, remove the others
+        token_list[index-1] = total
+        del token_list[index]
+        del token_list[index]
+    while "*" in token_list:
+        index = token_list.index("*")
+        value_before = 0
+        value_after = 0
+        if token_list[index-1] != ")":
+            value_before = int(token_list[index-1])
+        else:
+            value_before = 0
+        if token_list[index+1] != "(":
+            value_after = int(token_list[index+1])
+        else:
+            value_after = 0
+        total = value_before * value_after
+        # replace the first value, remove the others
+        token_list[index-1] = total
+        del token_list[index]
+        del token_list[index]
+    print(token_list)
+        
 
 expression_list = day18.read_input("input//example.txt")
 
-tree = make_expression_tree(expression_list[0])
-print(tree)
+resolve_in_place(expression_list[0])
